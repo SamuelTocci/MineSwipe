@@ -1,21 +1,38 @@
-import java.util.ArrayList;
 
 public class Map {
-    private ArrayList<ArrayList<String>> map;
+    private String[][] map;
+    private int sizeX;
+    private int sizeY;
+    private int nrOfMines;
 
-    public Map(int sizeX, int sizeY, int nOfMines) {
+    public Map(int sizeX, int sizeY, int nrOfMines) {
+        this.sizeX = sizeX;
+        this.sizeY = sizeY;
+        this.nrOfMines = nrOfMines;
 
-        map = new ArrayList<ArrayList<String>>();
-
-        for (int i = 0; i < sizeX; i++) {
-            map.add(new ArrayList<String>());
-        }
-        for (int i = 0; i < sizeX; i++) {
-            for (int j = 0; j < sizeY; j++) {
-                map.get(i).add("0");
+        String[][] map = new String[sizeX][sizeY];
+        for(int x = 0; x<sizeX;x++) {
+            for (int y = 0; y<sizeY;y++) {
+                map[x][y] = "0";
             }
         }
-        System.out.print(map);
+
+    }
+
+    public String[][] getMap() {
+        return map;
+    }
+
+    public int getSizeX() {
+        return sizeX;
+    }
+
+    public int getSizeY() {
+        return sizeY;
+    }
+
+    public int getNrOfMines() {
+        return nrOfMines;
     }
 }
 
