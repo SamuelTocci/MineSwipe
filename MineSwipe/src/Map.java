@@ -39,7 +39,9 @@ public class Map {
     }
 
     //functionality
-
+    public String check(int xPos, int yPos){
+        return map[xPos][yPos];
+    }
     /*
     * zet mines op het veld
     * */
