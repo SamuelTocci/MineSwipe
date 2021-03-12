@@ -1,6 +1,8 @@
 public class Test {
     public static void main(String[] args) {
-        Map tester = new Map(8, 8,0);
+        Map tester = new Map(Difficulty.EZ);
+        Display display = new Display(tester);
+        display.show();
 
     }
 }

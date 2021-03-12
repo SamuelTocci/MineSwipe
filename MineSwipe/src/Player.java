@@ -20,7 +20,7 @@ public class Player {
     public boolean bCheck(int xPos, int yPos){
         Boolean flag= false;
         if(valid(xPos,yPos)){
-            if(map.check(xPos, yPos)=="B"){
+            if(map.check(xPos, yPos).isBomb()){
                 flag = true;
             }
         }
