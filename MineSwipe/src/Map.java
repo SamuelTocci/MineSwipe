@@ -10,8 +10,8 @@ public class Map {
     public Map(Difficulty difficulty) {
         switch (difficulty) {
             case HARD:
-                this.sizeX = 16;
-                this.sizeY = 30;
+                this.sizeX = 30;
+                this.sizeY = 16;
                 this.nrOfMines = 99;
                 break;
             case MEDIUM:
@@ -61,7 +61,7 @@ public class Map {
          * */
         public void mines () {
             Random random = new Random();
-            for (int i = 0; i < nrOfMines + 1; i++) {
+            for (int i = 0; i < nrOfMines; i++) {
                 int randX = random.nextInt(sizeX);
                 int randY = random.nextInt(sizeY);
                 if (!map[randX][randY].isBomb()) {
@@ -70,6 +70,7 @@ public class Map {
                     i--;
                 }
             }
+            preSolve();
         }
         /*
          * als startplek op bom is, bom verplaatsen naar links boven
@@ -85,23 +86,26 @@ public class Map {
                         }
                     }
                 }
+                preSolve();
             }
+
 
         }
         /*
          * zet nummers op de map
          * */
         public void preSolve () {
+
             for (int x = 0; x < sizeX; x++) {
                 for (int y = 0; y < sizeY; y++) {
-                    if (!map[x][y].isBomb()) {
-                        int bcount = 0;
-                        for (int a = -1; a < 1; a++) {
-                            for (int b = -1; y < 1; b++) {
-                                    if (map[x + a][x + b].isBomb()) {
-                                        bcount++;
-                                        map[x][y].setValue(bcount);
+                    if (map[x][y].isBomb()) {
+                        for (int a = -1; a <= 1; a++) {
+                            for (int b = -1; b <= 1; b++) {
+                                if (x + a >= 0 && y + b >=   0 && x + a < sizeX && y + b < sizeY) {
+                                    if (!map[x + a][y + b].isBomb()) {
+                                        map[x + a][y + b].setValue(map[x + a][y + b].getValue() + 1);
                                     }
+                                }
                             }
                         }
                     }

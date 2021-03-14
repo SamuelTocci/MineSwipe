@@ -9,11 +9,11 @@ public class Display {
         for (int y = 0; y < map.getSizeY(); y++) {
             System.out.println();
            for (int x = 0; x < map.getSizeX(); x++) {
-                if (false){
-                    System.out.print("@");
+                if (map.getMap()[x][y].isBomb()){
+                    System.out.print("@" + " ");
                 }
                 else{
-                    System.out.print(map.check(x,y));
+                    System.out.print(map.check(x,y).getValue() + " ");
                 }
             }
         }
