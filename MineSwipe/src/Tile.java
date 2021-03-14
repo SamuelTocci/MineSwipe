@@ -1,5 +1,6 @@
 public class Tile {
     private boolean isVisible;
+    private boolean isFlagged;
     private int value;
 
     public Tile() {
@@ -22,6 +23,11 @@ public class Tile {
         return value;
     }
 
-    public void setValue(int value) {
+    public void setValue(int value) {}
+
+    public boolean isFlagged() {
+        return isFlagged;
     }
+
+    public void toggleFlagged() { isFlagged= !isFlagged; }
 }

@@ -66,6 +66,7 @@ public class Map {
         public int getNrOfMines () {
             return nrOfMines;
         }
+
         /*
          * als startplek op bom is, bom verplaatsen naar links boven
          * */
@@ -106,7 +107,9 @@ public class Map {
                 }
             }
         }
-
+    /*
+     * wordt opgeroepen bij elke zet en doet al het werk om te bepalen wat er bij de zet moet gebeuren
+     * */
     public boolean resolve(int x, int y){
             if (moves == 0){
                 moves++;
@@ -123,6 +126,9 @@ public class Map {
             }
     }
 
+    /*
+     * maakt de zone rondom de klik zichtbaar
+     * */
     public void visualizer(int x,int y){
         if(map[x][y].getValue() == 0 && !map[x][y].isVisible()){
             map[x][y].setVisible(true);
@@ -137,5 +143,21 @@ public class Map {
         else{
             map[x][y].setVisible(true);
         }
+    }
+
+    public boolean flag(int posX, int posY){
+        map[posX][posY].toggleFlagged();
+
+        for (int x = 0; x < sizeX; x++) {
+            for (int y = 0; y < sizeY; y++) {
+                if(map[x][y].isBomb() && !map[x][y].isFlagged()){
+                    return false;
+                }
+                if(!map[x][y].isBomb() && map[x][y].isFlagged()){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
