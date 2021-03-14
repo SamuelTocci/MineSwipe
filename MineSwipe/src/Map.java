@@ -26,7 +26,7 @@ public class Map {
                 break;
             }
 
-            Tile[][] map = new Tile[sizeX][sizeY];
+            map = new Tile[sizeX][sizeY];
             for (int x = 0; x < sizeX; x++) {
                 for (int y = 0; y < sizeY; y++) {
                     map[x][y] = new NrTile();
