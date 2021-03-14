@@ -3,6 +3,6 @@ public class Test {
         Map tester = new Map(Difficulty.EZ);
         Display display = new Display(tester);
         display.show();
-
+        //test voor glenn
     }
 }
