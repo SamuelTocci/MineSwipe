@@ -5,6 +5,6 @@ public class Test {
         System.out.println(tester.resolve(1,2));
         display.show();
         display.showVisibility();
-
+        GUI gui = new GUI();
     }
 }
