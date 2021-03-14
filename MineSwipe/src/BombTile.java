@@ -4,7 +4,4 @@ public class BombTile extends Tile {
     public boolean isBomb(){
         return true;
     }
-    public boolean isNr(){
-        return false;
-    }
 }

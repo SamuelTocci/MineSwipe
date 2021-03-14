@@ -5,9 +5,11 @@ public class Map {
     private int sizeX;
     private int sizeY;
     private int nrOfMines;
+    private int moves;
 
     // initializing and creating map with allemaal "0"
     public Map(Difficulty difficulty) {
+        moves = 0;
         switch (difficulty) {
             case HARD:
                 this.sizeX = 30;
@@ -32,6 +34,19 @@ public class Map {
                     map[x][y] = new NrTile();
                 }
             }
+        /*
+         * zet mines op het veld
+         * */
+        Random random = new Random();
+        for (int i = 0; i < nrOfMines; i++) {
+            int randX = random.nextInt(sizeX);
+            int randY = random.nextInt(sizeY);
+            if (!map[randX][randY].isBomb()) {
+                map[randX][randY] = new BombTile();
+            } else {
+                i--;
+            }
+        }
 
     }
 
@@ -51,27 +66,6 @@ public class Map {
         public int getNrOfMines () {
             return nrOfMines;
         }
-
-        //functionality
-        public Tile check ( int xPos, int yPos){
-            return map[xPos][yPos];
-        }
-        /*
-         * zet mines op het veld
-         * */
-        public void mines () {
-            Random random = new Random();
-            for (int i = 0; i < nrOfMines; i++) {
-                int randX = random.nextInt(sizeX);
-                int randY = random.nextInt(sizeY);
-                if (!map[randX][randY].isBomb()) {
-                    map[randX][randY] = new BombTile();
-                } else {
-                    i--;
-                }
-            }
-            preSolve();
-        }
         /*
          * als startplek op bom is, bom verplaatsen naar links boven
          * */
@@ -86,9 +80,9 @@ public class Map {
                         }
                     }
                 }
-                preSolve();
             }
-
+            preSolve();
+            visualizer(posX,posY);
 
         }
         /*
@@ -112,4 +106,36 @@ public class Map {
                 }
             }
         }
+
+    public boolean resolve(int x, int y){
+            if (moves == 0){
+                moves++;
+                startMove(x,y);
+                return false;
+            }
+            else {
+                moves++;
+                if (map[x][y].isBomb()) {
+                    return true;
+                }
+                visualizer(x, y);
+                return false;
+            }
+    }
+
+    public void visualizer(int x,int y){
+        if(map[x][y].getValue() == 0 && !map[x][y].isVisible()){
+            map[x][y].setVisible(true);
+            for (int a = -1; a <= 1; a++) {
+                for (int b = -1; b <= 1; b++) {
+                    if (x + a >= 0 && y + b >=   0 && x + a < sizeX && y + b < sizeY) {
+                        visualizer(x + a, y + b);
+                    }
+                }
+            }
+        }
+        else{
+            map[x][y].setVisible(true);
+        }
+    }
 }

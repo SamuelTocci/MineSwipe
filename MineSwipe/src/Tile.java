@@ -1,6 +1,5 @@
 public class Tile {
     private boolean isVisible;
-    private int bAmount;
     private int value;
 
     public Tile() {
@@ -14,6 +13,7 @@ public class Tile {
     public void setVisible(boolean visible) {
         isVisible = visible;
     }
+
     public boolean isBomb(){
         return false;
     }

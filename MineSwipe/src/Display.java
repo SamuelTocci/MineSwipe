@@ -13,8 +13,16 @@ public class Display {
                     System.out.print("@" + " ");
                 }
                 else{
-                    System.out.print(map.check(x,y).getValue() + " ");
+                    System.out.print(map.getMap()[x][y].getValue() + " ");
                 }
+            }
+        }
+    }
+    public void showVisibility(){
+        for (int y = 0; y < map.getSizeY(); y++) {
+            System.out.println();
+            for (int x = 0; x < map.getSizeX(); x++) {
+                System.out.print(map.getMap()[x][y].isVisible() + " ");
             }
         }
     }
