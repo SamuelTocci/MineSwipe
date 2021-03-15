@@ -73,13 +73,17 @@ public class Map {
          * als startplek op bom is, bom verplaatsen naar links boven
          * */
         public void startMove ( int posX, int posY){
-            if (map[posX][posY].isBomb()) {
-                map[posX][posY] = new NrTile();
-                for (int x = 0; x < sizeX; x++) {
-                    for (int y = 0; y < sizeY; y++) {
-                        if (!map[x][y].isBomb()) {
-                            map[x][y] = new BombTile();
-                            break;
+            for (int a = -1; a <= 1; a++) {
+                for (int b = -1; b <= 1; b++) {
+                    if (map[posX+a][posY+b].isBomb()) {
+                        map[posX+a][posY+b] = new NrTile();
+                        for (int x = 0; x < sizeX; x++) {
+                            for (int y = 0; y < sizeY; y++) {
+                                if (!map[x][y].isBomb()) {
+                                    map[x][y] = new BombTile();
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
