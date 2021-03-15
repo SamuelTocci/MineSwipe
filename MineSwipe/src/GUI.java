@@ -18,14 +18,18 @@ public class GUI extends JFrame {
     private int mouseY;
     private int side;
     private Font font;
-    private boolean bPress;
+    public enum State {
+        START_MENU,
+        PLAY,
+        DEATH
+    }
+    private State gState;
 
     public GUI(Map map) {
         this.setTitle("MineSwipe");
         Dimension size= Toolkit.getDefaultToolkit().getScreenSize();
         width = (int)size.getWidth();
         height = (int)size.getHeight();
-        bPress = false;
         this.setSize(width, height);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
@@ -34,6 +38,7 @@ public class GUI extends JFrame {
         this.spacing = 5;
         this.side = 80;
         this.font = new Font("Montserrat-Bold", Font.BOLD, side/4*3);
+        this.gState = State.PLAY;
 
         Move move = new Move();
         this.addMouseMotionListener(move);
@@ -62,43 +67,45 @@ public class GUI extends JFrame {
             LinearGradientPaint gradient = new LinearGradientPaint(start, end, dist, colors);
             g2d.setPaint(gradient);
             g2d.fillRect(0,0,width,height);
+            switch(gState){
+                case START_MENU:
 
-            /*Toolkit t=Toolkit.getDefaultToolkit();
-            Image i=t.getImage("LOGO.png");
-            g.drawImage(i, 0,0,this);*/
-            for (int x = 0; x < map.getSizeX(); x++) {
-                for (int y = 0; y < map.getSizeY(); y++) {
-                    g.setColor(Color.lightGray);
-                    if (mouseX >= spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2
-                            && mouseX < spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2 +side
-                            && mouseY>=spacing + y *side + 1.5*side
-                            && mouseY<spacing + y *side + side - 2 * spacing + 1.5*side) {
-                        g.setColor(Color.darkGray);
-                    }
-                    g.fillRect(spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2, spacing + y * side + side, side - 2 * spacing, side - 2 * spacing);
-                    if(map.getMap()[x][y].isVisible()){
-                        g.setColor(Color.white);
-                    }
-                    if(!map.getMap()[x][y].isVisible()){
-                        if(map.getMap()[x][y].isFlagged()){
-                            g.setColor(color2);
-                            g.drawString("F",spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2 + side/4,spacing + y * side + side+side/4*3-side/16);
+                case PLAY:
+                    for (int x = 0; x < map.getSizeX(); x++) {
+                        for (int y = 0; y < map.getSizeY(); y++) {
+                            g.setColor(Color.lightGray);
+                            if (mouseX >= spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2
+                                    && mouseX < spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2 +side
+                                    && mouseY>=spacing + y *side + 1.5*side
+                                    && mouseY<spacing + y *side + side - 2 * spacing + 1.5*side) {
+                                g.setColor(Color.darkGray);
+                            }
+                            g.fillRect(spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2, spacing + y * side + side, side - 2 * spacing, side - 2 * spacing);
+                            if(map.getMap()[x][y].isVisible()){
+                                g.setColor(Color.white);
+                            }
+                            if(!map.getMap()[x][y].isVisible()){
+                                if(map.getMap()[x][y].isFlagged()){
+                                    g.setColor(color2);
+                                    g.drawString("F",spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2 + side/4,spacing + y * side + side+side/4*3-side/16);
 
+                                }
+                            }
+                            if(map.getMap()[x][y].isVisible()){
+                                g.setColor(Color.black);
+                                g.setFont(font);
+                                g.drawString(Integer.toString(map.getMap()[x][y].getValue()),spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2 + side/4,spacing + y * side + side+side/4*3-side/16);
+                            }
+                            repaint();
                         }
                     }
-                    if(bPress){
-                        g2d.setPaint(gradient);
-                        g2d.fillRect(0,0,width,height);
-                        g.setColor(Color.white);
-                        g.drawString("GAME OVEROVEROVEROVEROVEROVEROVER",width/3, height/2);
-                    }
-                    if(map.getMap()[x][y].isVisible()){
-                        g.setColor(Color.black);
-                        g.setFont(font);
-                        g.drawString(Integer.toString(map.getMap()[x][y].getValue()),spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2 + side/4,spacing + y * side + side+side/4*3-side/16);
-                    }
-                    repaint();
-                }
+                    break;
+                case DEATH:
+                    g2d.setPaint(gradient);
+                    g2d.fillRect(0,0,width,height);
+                    g.setColor(Color.white);
+                    g.setFont(font);
+                    g.drawString("GAME OVER",width/2 -100, height/2);
             }
         }
     }
@@ -130,7 +137,7 @@ public class GUI extends JFrame {
                     if(SwingUtilities.isLeftMouseButton(e)){
                         map.resolve(inBoxX(mouseX),inBoxY(mouseY));
                         if(map.resolve(inBoxX(mouseX),inBoxY(mouseY))){
-                            bPress = true;
+                            gState = State.DEATH;
                         }
                     }
                     if(SwingUtilities.isRightMouseButton(e)){
