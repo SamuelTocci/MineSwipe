@@ -4,6 +4,9 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.geom.Point2D;
 import java.awt.*;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 public class GUI extends JFrame {
     //private GameState m_curState = GameState.TITLE_STATE;
@@ -14,12 +17,15 @@ public class GUI extends JFrame {
     private int mouseX;
     private int mouseY;
     private int side;
+    private Font font;
+    private boolean bPress;
 
     public GUI(Map map) {
         this.setTitle("MineSwipe");
         Dimension size= Toolkit.getDefaultToolkit().getScreenSize();
         width = (int)size.getWidth();
-        height = (int)size.getWidth();
+        height = (int)size.getHeight();
+        bPress = false;
         this.setSize(width, height);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
@@ -27,6 +33,7 @@ public class GUI extends JFrame {
         this.map = map;
         this.spacing = 5;
         this.side = 80;
+        this.font = new Font("Montserrat-Bold", Font.BOLD, side/4*3);
 
         Move move = new Move();
         this.addMouseMotionListener(move);
@@ -69,12 +76,26 @@ public class GUI extends JFrame {
                         g.setColor(Color.darkGray);
                     }
                     g.fillRect(spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2, spacing + y * side + side, side - 2 * spacing, side - 2 * spacing);
-                    if(map.getMap()[x][y].isVisible() == true){
+                    if(map.getMap()[x][y].isVisible()){
                         g.setColor(Color.white);
                     }
-                    if(map.getMap()[x][y].isVisible() == true){
+                    if(!map.getMap()[x][y].isVisible()){
+                        if(map.getMap()[x][y].isFlagged()){
+                            g.setColor(color2);
+                            g.drawString("F",spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2 + side/4,spacing + y * side + side+side/4*3-side/16);
+
+                        }
+                    }
+                    if(bPress){
+                        g2d.setPaint(gradient);
+                        g2d.fillRect(0,0,width,height);
+                        g.setColor(Color.white);
+                        g.drawString("GAME OVEROVEROVEROVEROVEROVEROVER",width/3, height/2);
+                    }
+                    if(map.getMap()[x][y].isVisible()){
                         g.setColor(Color.black);
-                        g.drawString(Integer.toString(map.getMap()[x][y].getValue()),1000,1500);
+                        g.setFont(font);
+                        g.drawString(Integer.toString(map.getMap()[x][y].getValue()),spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2 + side/4,spacing + y * side + side+side/4*3-side/16);
                     }
                     repaint();
                 }
@@ -170,11 +191,22 @@ public class GUI extends JFrame {
         @Override
         public void mouseClicked(MouseEvent e) {
 
+
         }
 
         @Override
         public void mousePressed(MouseEvent e) {
-
+                if(inBoxX(mouseX) != -1 && inBoxY(mouseY) != -1){
+                    if(SwingUtilities.isLeftMouseButton(e)){
+                        map.resolve(inBoxX(mouseX),inBoxY(mouseY));
+                        if(map.resolve(inBoxX(mouseX),inBoxY(mouseY))){
+                            bPress = true;
+                        }
+                    }
+                    if(SwingUtilities.isRightMouseButton(e)){
+                        map.flag(inBoxX(mouseX),inBoxY(mouseY));
+                    }
+                }
         }
 
         @Override
@@ -191,21 +223,19 @@ public class GUI extends JFrame {
         public void mouseExited(MouseEvent e) {
 
         }
-        public int inBoxX(){
+        public int inBoxX(int mX){
             for (int x = 0; x < map.getSizeX(); x++) {
-                if(mouseX >= spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2
-                        && mouseX < spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2 +side){
-                    System.out.println(x);
+                if(mX >= spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2
+                        && mX < spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2 +side){
                     return x;
                 }
             }
             return -1;
         }
-        public int inBoxY(){
+        public int inBoxY(int mY){
             for (int y = 0; y < map.getSizeY(); y++) {
-                if(mouseY>=spacing + y *side + 1.5*side
-                        && mouseY<spacing + y *side + side - 2 * spacing + 1.5*side){
-                    System.out.println(y);
+                if(mY>=spacing + y *side + 1.5*side
+                        && mY<spacing + y *side + side - 2 * spacing + 1.5*side){
                     return y;
                 }
             }
