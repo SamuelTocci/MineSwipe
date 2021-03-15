@@ -69,25 +69,27 @@ public class Map {
             return nrOfMines;
         }
 
+        public int getFlagCount () {
+        return flagCount;
+    }
+
         /*
          * als startplek op bom is, bom verplaatsen naar links boven
          * */
         public void startMove ( int posX, int posY){
-            for (int a = -1; a <= 1; a++) {
-                for (int b = -1; b <= 1; b++) {
-                    if (map[posX+a][posY+b].isBomb()) {
-                        map[posX+a][posY+b] = new NrTile();
+                    if (map[posX][posY].isBomb()) {
+                        map[posX][posY] = new NrTile();
+
                         for (int x = 0; x < sizeX; x++) {
                             for (int y = 0; y < sizeY; y++) {
-                                if (!map[x][y].isBomb()) {
+
+                                if (!map[x][y].isBomb() && !(x == posX && y == posY)) {
                                     map[x][y] = new BombTile();
                                     break;
                                 }
                             }
                         }
                     }
-                }
-            }
             preSolve();
             visualizer(posX,posY);
 
@@ -117,6 +119,7 @@ public class Map {
      * wordt opgeroepen bij elke zet en doet al het werk om te bepalen wat er bij de zet moet gebeuren
      * */
     public boolean resolve(int x, int y){
+
             if (moves == 0){
                 moves++;
                 startMove(x,y);
