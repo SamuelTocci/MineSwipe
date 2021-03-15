@@ -6,6 +6,7 @@ public class Map {
     private int sizeY;
     private int nrOfMines;
     private int moves;
+    private int flagCount;
 
     // initializing and creating map with allemaal "0"
     public Map(Difficulty difficulty) {
@@ -47,6 +48,7 @@ public class Map {
                 i--;
             }
         }
+        flagCount = 0;
 
     }
 
@@ -146,8 +148,22 @@ public class Map {
     }
 
     public boolean flag(int posX, int posY){
+        if(flagCount == nrOfMines && map[posX][posY].isFlagged()){
+            flagCount--;
+            map[posX][posY].toggleFlagged();
+            return false;
+        }
+
+        flagCount++;
         map[posX][posY].toggleFlagged();
 
+        if (flagCount == nrOfMines){
+            return hasWon();
+        }
+        return false;
+    }
+
+    public boolean hasWon(){
         for (int x = 0; x < sizeX; x++) {
             for (int y = 0; y < sizeY; y++) {
                 if(map[x][y].isBomb() && !map[x][y].isFlagged()){
