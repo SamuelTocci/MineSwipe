@@ -7,6 +7,11 @@ public class Map {
     private int nrOfMines;
     private int moves;
     private int flagCount;
+    public enum Difficulty {
+        HARD,
+        MEDIUM,
+        EZ
+    }
 
     // initializing and creating map with allemaal "0"
     public Map(Difficulty difficulty) {
