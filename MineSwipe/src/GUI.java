@@ -28,8 +28,9 @@ public class GUI extends JFrame {
     private Image icon;
     private Image bombImage;
     private Image flagImage;
+    private Image mainImage;
 
-    public GUI(Map map) {
+    public GUI() {
         this.setTitle("MineSwipe");
         icon = Toolkit.getDefaultToolkit().getImage("res\\LOGO.png");
         setIconImage(icon);
@@ -40,11 +41,11 @@ public class GUI extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(true);
         this.setResizable(true);
-        this.map = map;
         this.spacing = 5;
         this.side = 80;
         bombImage = icon.getScaledInstance(side/2, side/2, Image.SCALE_SMOOTH);
         flagImage = Toolkit.getDefaultToolkit().getImage("res\\Flag.png").getScaledInstance(side/3*2, side/3*2, Image.SCALE_SMOOTH);
+        mainImage = icon.getScaledInstance(3*side, 3*side, Image.SCALE_SMOOTH);
         try {
             tinderFont = Font.createFont(Font.TRUETYPE_FONT, new File("res\\Tinder.ttf")).deriveFont(side/4*3f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -52,7 +53,7 @@ public class GUI extends JFrame {
         } catch (IOException |FontFormatException e) {
             //Handle exception
         }
-        this.gState = State.PLAY;
+        this.gState = State.START_MENU;
 
         Move move = new Move();
         this.addMouseMotionListener(move);
@@ -65,18 +66,6 @@ public class GUI extends JFrame {
     }
     public void setgState(State s){
         gState = s;
-    }
-
-    private static BufferedImage commonResize(BufferedImage source,int width, int height, Object hint) {
-        BufferedImage img = new BufferedImage(width, height, source.getType());
-        Graphics2D g = img.createGraphics();
-        try {
-            g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, hint);
-            g.drawImage(source, 0, 0, width, height, null);
-        } finally {
-            g.dispose();
-        }
-        return img;
     }
 
     public class Board extends JPanel {
@@ -97,24 +86,50 @@ public class GUI extends JFrame {
             g2d.fillRect(0,0,width,height);
             switch(gState){
                 case START_MENU:
+                    g.setColor(Color.pink);
+                    g.fillRoundRect(width/2-4*side-2*spacing, height/2, 4*side, 2*side,side/4,side/4);
+                    g.fillRoundRect(width/2 + 2*spacing, height/2, 4*side, 2*side,side/4,side/4);
+                    g.fillRoundRect(width/2 - 2*side, height/2 - 2*side - 4*spacing, 4*side, 2*side,side/4,side/4);
+                    g.drawImage(mainImage, width/2-120,height/6 - 2*side - 4*spacing,this);
 
+                    g.setColor(Color.white);
+                    g.setFont(tinderFont);
+                    g.drawString("MINESWIPE",width/2 -185, height/4);
+
+                    g.setColor(Color.lightGray);
+                    if(mouseX >= width / 2 - 4 * side - 2 * spacing && mouseX < width / 2 - 4 * side - 2 * spacing + 4 * side && mouseY >= height / 2 - 2 * side && mouseY < height / 2) {
+                        g.fillRoundRect(width/2-4*side-2*spacing, height/2, 4*side, 2*side,side/4,side/4);
+                    }
+                    if(mouseX >= width / 2 + 2 * spacing && mouseX < width / 2 + 2 * spacing + 4*side && mouseY >= height / 2 - 2 * side && mouseY < height / 2) {
+                        g.fillRoundRect(width/2 - 2*side, height/2 - 2*side - 4*spacing, 4*side, 2*side,side/4,side/4);
+                    }
+                    if(mouseX >= width / 2 - 2 * side && mouseX < width / 2 +2*side && mouseY >= height / 2 - 2 * side - 4 * spacing - 2 * side && mouseY < height / 2 - 2 * side - 4 * spacing) {
+                        g.fillRoundRect(width/2 - 2*side, height/2 - 2*side - 4*spacing, 4*side, 2*side,side/4,side/4);
+                    }
+                    g.setColor(Color.black);
+                    g.drawString(Map.Difficulty.EZ.toString(),width/2-5*side/2-2*spacing,height/2+side/3*4);
+                    g.drawString(Map.Difficulty.MEDIUM.toString(),width/2+side/2-spacing,height/2+side/3*4);
+                    g.drawString(Map.Difficulty.HARD.toString(),width/2-side-2*spacing,height/2-side);
+
+                    repaint();
+                    break;
                 case PLAY:
                     for (int x = 0; x < map.getSizeX(); x++) {
                         for (int y = 0; y < map.getSizeY(); y++) {
                             g.setColor(Color.darkGray);
-                            g.fillRect(spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2, spacing + y * side + side, side - 2 * spacing, side - 2 * spacing);
+                            g.fillRoundRect(spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2, spacing + y * side + side, side - 2 * spacing, side - 2 * spacing,side/4, side/4);
                             if(!map.getMap()[x][y].isVisible()){
                                 if (mouseX >= spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2
                                         && mouseX < spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2 +side
                                         && mouseY>=spacing + y *side + 1.5*side
                                         && mouseY<spacing + y *side + side - 2 * spacing + 1.5*side) {
                                     g.setColor(Color.lightGray);
-                                    g.fillRect(spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2, spacing + y * side + side, side - 2 * spacing, side - 2 * spacing);
+                                    g.fillRoundRect(spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2, spacing + y * side + side, side - 2 * spacing, side - 2 * spacing,side/4, side/4);
                                 }
                             }
                             if(map.getMap()[x][y].isVisible()){
-                                g.setColor(Color.white);
-                                g.fillRect(spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2, spacing + y * side + side, side - 2 * spacing, side - 2 * spacing);
+                                g.setColor(Color.pink);
+                                g.fillRoundRect(spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2, spacing + y * side + side, side - 2 * spacing, side - 2 * spacing,side/4, side/4);
                             }
                             if(!map.getMap()[x][y].isVisible()){
                                 if(map.getMap()[x][y].isFlagged()){
@@ -135,46 +150,50 @@ public class GUI extends JFrame {
                 case DEATH:
                     g2d.setPaint(gradient);
                     g2d.fillRect(0,0,width,height);
-                    g.setColor(color2);
-                    g.setFont(tinderFont);
-                    g.drawString("GAME OVER",width/2 -100, height/2);
                     for (int x = 0; x < map.getSizeX(); x++) {
                         for (int y = 0; y < map.getSizeY(); y++) {
-                            g.setColor(Color.white);
-                            g.fillRect(spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2, spacing + y * side + side, side - 2 * spacing, side - 2 * spacing);
+                            g.setColor(Color.pink);
+                            g.fillRoundRect(spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2, spacing + y * side + side, side - 2 * spacing, side - 2 * spacing,side/4, side/4);
                             if(map.getMap()[x][y].getValue() != 0){
                                 g.setColor(Color.black);
                                 g.setFont(tinderFont);
                                 g.drawString(Integer.toString(map.getMap()[x][y].getValue()),spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2 + side/4,spacing + y * side + side+side/4*3-side/16);
                             }
                             if(map.getMap()[x][y].isBomb()){
-                                g.drawImage(bombImage, spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2+side/8,spacing + y * side + side+side/4*3-side/16-side/2-side/16,this);
+                                g.drawImage(bombImage, spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2+side/5,spacing + y * side + side+side/4*3-side/16-side/2-side/16 + side/16,this);
                             }
 
                         }
                     }
+                    g.setColor(Color.white);
+                    g.setFont(tinderFont);
+                    g.drawString("GAME OVER",width/2 -200, side/4*3);
+                    repaint();
+                    break;
 
                 case WON:
                     g2d.setPaint(gradient);
                     g2d.fillRect(0,0,width,height);
-                    g.setColor(color2);
+                    g.setColor(Color.white);
                     g.setFont(tinderFont);
-                    g.drawString("YOU WON",width/2 -100, height/2);
+                    g.drawString("YOU WON",width/2 -150, side/4*3);
                     for (int x = 0; x < map.getSizeX(); x++) {
                         for (int y = 0; y < map.getSizeY(); y++) {
-                            g.setColor(Color.white);
-                            g.fillRect(spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2, spacing + y * side + side, side - 2 * spacing, side - 2 * spacing);
+                            g.setColor(Color.pink);
+                            g.fillRoundRect(spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2, spacing + y * side + side, side - 2 * spacing, side - 2 * spacing,side/4, side/4);
                             if(map.getMap()[x][y].getValue() != 0){
                                 g.setColor(Color.black);
                                 g.setFont(tinderFont);
                                 g.drawString(Integer.toString(map.getMap()[x][y].getValue()),spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2 + side/4,spacing + y * side + side+side/4*3-side/16);
                             }
                             if(map.getMap()[x][y].isBomb()){
-                                g.drawImage(bombImage, spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2+side/8,spacing + y * side + side+side/4*3-side/16-side/2-side/16,this );
+                                g.drawImage(bombImage, spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2+side/5,spacing + y * side + side+side/4*3-side/16-side/2-side/16 + side/16,this);
                             }
 
                         }
                     }
+                    repaint();
+                    break;
 
             }
         }
@@ -193,7 +212,7 @@ public class GUI extends JFrame {
             mouseY = e.getY();
         }
     }
-    public class Click implements MouseListener{
+    public class Click implements MouseListener {
 
         @Override
         public void mouseClicked(MouseEvent e) {
@@ -203,19 +222,38 @@ public class GUI extends JFrame {
 
         @Override
         public void mousePressed(MouseEvent e) {
-            switch(gState) {
+            switch (gState) {
                 case PLAY:
-                if (inBoxX(mouseX) != -1 && inBoxY(mouseY) != -1) {
-                    if (SwingUtilities.isLeftMouseButton(e)) {
-                        map.resolve(inBoxX(mouseX), inBoxY(mouseY));
-                        if (map.resolve(inBoxX(mouseX), inBoxY(mouseY))) {
-                            setgState(State.DEATH);
+                    if (inBoxX(mouseX) != -1 && inBoxY(mouseY) != -1) {
+                        if (SwingUtilities.isLeftMouseButton(e)) {
+                            map.resolve(inBoxX(mouseX), inBoxY(mouseY));
+                            if (map.hasWon()) {
+                                setgState(State.WON);
+                            }
+                            if (map.resolve(inBoxX(mouseX), inBoxY(mouseY))) {
+                                setgState(State.DEATH);
+                            }
+                        }
+                        if (SwingUtilities.isRightMouseButton(e)) {
+                            map.flag(inBoxX(mouseX), inBoxY(mouseY));
                         }
                     }
-                    if (SwingUtilities.isRightMouseButton(e)) {
-                        map.flag(inBoxX(mouseX), inBoxY(mouseY));
+                case START_MENU:
+                    if (inBoxX(mouseX) == 1 && inBoxY(mouseY) == 1) {
+                        map = new Map(Map.Difficulty.EZ);
+                        gState = State.PLAY;
                     }
-                }
+                    if (inBoxX(mouseX) == 2 && inBoxY(mouseY) == 2) {
+                        map = new Map(Map.Difficulty.MEDIUM);
+                        gState = State.PLAY;
+                    }
+                    if (inBoxX(mouseX) == 3 && inBoxY(mouseY) == 3) {
+                        map = new Map(Map.Difficulty.HARD);
+                        gState = State.PLAY;
+                    }
+                    break;
+                case DEATH:
+                    gState = State.START_MENU;
 
             }
         }
@@ -234,21 +272,48 @@ public class GUI extends JFrame {
         public void mouseExited(MouseEvent e) {
 
         }
-        public int inBoxX(int mX){
-            for (int x = 0; x < map.getSizeX(); x++) {
-                if(mX >= spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2
-                        && mX < spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2 +side){
-                    return x;
-                }
+
+        public int inBoxX(int mX) {
+            switch (gState) {
+                case PLAY:
+                    for (int x = 0; x < map.getSizeX(); x++) {
+                        if (mX >= spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2
+                                && mX < spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2 + side) {
+                            return x;
+                        }
+                    }
+                case START_MENU:
+                    if (mX >= width/2-4*side-2*spacing && mX < width/2-4*side-2*spacing + 4*side) {
+                        return 1;
+                    }
+                    if (mX >= width / 2 + 2 * spacing && mX < width / 2 + 2 * spacing + 4*side){
+                        return 2;
+                        }
+                    if (mX >= width/2 - 6*side && mX < width/2-2*side ){
+                        return 3;
+                    }
             }
             return -1;
         }
-        public int inBoxY(int mY){
-            for (int y = 0; y < map.getSizeY(); y++) {
-                if(mY>=spacing + y *side + 1.5*side
-                        && mY<spacing + y *side + side - 2 * spacing + 1.5*side){
-                    return y;
-                }
+
+        public int inBoxY(int mY) {
+            switch (gState) {
+                case PLAY:
+                    for (int y = 0; y < map.getSizeY(); y++) {
+                        if (mY >= spacing + y * side + 1.5 * side && mY < spacing + y * side + side - 2 * spacing + 1.5 * side) {
+                            return y;
+                        }
+                    }
+                case START_MENU:
+                    if (mY >= height / 2 +4*side && mY < height / 2 + 6*side) {
+                        return 1;
+                    }
+                    if (mY >= height / 2 - 2 * side && mY < height / 2) {
+                        return 2;
+                    }
+                    if (mY >= height/2 - 2*side - 4*spacing && mY < height/2 - 2*side - 4*spacing + 2*side) {
+                        return 3;
+                    }
             }
             return -1;
         }
