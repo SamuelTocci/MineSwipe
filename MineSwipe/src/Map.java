@@ -70,9 +70,7 @@ public class Map {
             return sizeY;
         }
 
-        public int getNrOfMines () {
-            return nrOfMines;
-        }
+        public int getNrOfMines () {return nrOfMines; }
 
         public int getFlagCount () {
         return flagCount;
@@ -82,19 +80,47 @@ public class Map {
          * als startplek op bom is, bom verplaatsen naar links boven
          * */
         public void startMove ( int posX, int posY){
-                    if (map[posX][posY].isBomb()) {
-                        map[posX][posY] = new NrTile();
-
+            boolean placed = false;
+            if(nrOfMines>((sizeX*sizeY)/2)) {
+                if (map[posX][posY].isBomb()) {
+                    map[posX][posY] = new NrTile();
+                    while (!placed) {
                         for (int x = 0; x < sizeX; x++) {
                             for (int y = 0; y < sizeY; y++) {
 
                                 if (!map[x][y].isBomb() && !(x == posX && y == posY)) {
                                     map[x][y] = new BombTile();
-                                    break;
+                                    placed = true;
                                 }
                             }
                         }
                     }
+                }
+            }
+            else {
+                int tempMines = nrOfMines;
+
+                for (int a = -1; a <= 1; a++) {
+                    for (int b = -1; b <= 1; b++) {
+                        if (posX + a >= 0 && posY + b >= 0 && posX + a < sizeX && posY + b < sizeY) {
+                            if (map[posX + a][posY + b].isBomb()) {
+                                map[posX + a][posY + b] = new NrTile();
+
+                                while (!placed) {
+                                    Random random = new Random();
+                                    int randX = random.nextInt(sizeX);
+                                    int randY = random.nextInt(sizeY);
+
+                                    if (!map[randX][randY].isBomb() && ((randX - posX > 1 || randX - posX < -1) && (randY - posY > 1 || randY - posY < -1))) {
+                                        map[randX][randY] = new BombTile();
+                                        placed = true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             preSolve();
             visualizer(posX,posY);
 
