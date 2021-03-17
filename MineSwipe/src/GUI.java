@@ -97,13 +97,13 @@ public class GUI extends JFrame {
                     g.drawString("MINESWIPE",width/2 -185, height/4);
 
                     g.setColor(Color.lightGray);
-                    if(mouseX >= width / 2 - 4 * side - 2 * spacing && mouseX < width / 2 - 4 * side - 2 * spacing + 4 * side && mouseY >= height / 2 - 2 * side && mouseY < height / 2) {
+                    if(mouseX >= width/2-4*side && mouseX < width/2-4*side+4*side && mouseY >= height/2 +side/4+2*spacing && mouseY < height/2+2*side+side/4+2*spacing) {
                         g.fillRoundRect(width/2-4*side-2*spacing, height/2, 4*side, 2*side,side/4,side/4);
                     }
-                    if(mouseX >= width / 2 + 2 * spacing && mouseX < width / 2 + 2 * spacing + 4*side && mouseY >= height / 2 - 2 * side && mouseY < height / 2) {
-                        g.fillRoundRect(width/2 - 2*side, height/2 - 2*side - 4*spacing, 4*side, 2*side,side/4,side/4);
+                    if(mouseX >= width/2 + 4*spacing && mouseX < width/2+4*side + 4*spacing && mouseY >= height/2 +side/4+2*spacing && mouseY < height/2+2*side+side/4+2*spacing) {
+                        g.fillRoundRect(width/2 + 2*spacing, height/2, 4*side, 2*side,side/4,side/4);
                     }
-                    if(mouseX >= width / 2 - 2 * side && mouseX < width / 2 +2*side && mouseY >= height / 2 - 2 * side - 4 * spacing - 2 * side && mouseY < height / 2 - 2 * side - 4 * spacing) {
+                    if(mouseX >= width/2 - 2*side+spacing && mouseX < width/2 - 2*side+4*side+2*spacing && mouseY >= height/2-2*side+2*spacing && mouseY < height/2+side/4-spacing) {
                         g.fillRoundRect(width/2 - 2*side, height/2 - 2*side - 4*spacing, 4*side, 2*side,side/4,side/4);
                     }
                     g.setColor(Color.black);
@@ -187,7 +187,7 @@ public class GUI extends JFrame {
                                 g.drawString(Integer.toString(map.getMap()[x][y].getValue()),spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2 + side/4,spacing + y * side + side+side/4*3-side/16);
                             }
                             if(map.getMap()[x][y].isBomb()){
-                                g.drawImage(bombImage, spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2+side/5,spacing + y * side + side+side/4*3-side/16-side/2-side/16 + side/16,this);
+                                g.drawImage(bombImage, spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2+side/5,spacing + y * side + side+side/4*3-side/16-side/2,this);
                             }
 
                         }
@@ -238,23 +238,24 @@ public class GUI extends JFrame {
                             map.flag(inBoxX(mouseX), inBoxY(mouseY));
                         }
                     }
+                    break;
                 case START_MENU:
                     if (inBoxX(mouseX) == 1 && inBoxY(mouseY) == 1) {
                         map = new Map(Map.Difficulty.EZ);
                         gState = State.PLAY;
                     }
-                    if (inBoxX(mouseX) == 2 && inBoxY(mouseY) == 2) {
+                    if (inBoxX(mouseX) == 2 && inBoxY(mouseY) == 1) {
                         map = new Map(Map.Difficulty.MEDIUM);
                         gState = State.PLAY;
                     }
-                    if (inBoxX(mouseX) == 3 && inBoxY(mouseY) == 3) {
+                    if (inBoxX(mouseX) == 3 && inBoxY(mouseY) == 2) {
                         map = new Map(Map.Difficulty.HARD);
                         gState = State.PLAY;
                     }
                     break;
                 case DEATH:
                     gState = State.START_MENU;
-
+                    break;
             }
         }
 
@@ -283,13 +284,13 @@ public class GUI extends JFrame {
                         }
                     }
                 case START_MENU:
-                    if (mX >= width/2-4*side-2*spacing && mX < width/2-4*side-2*spacing + 4*side) {
+                    if (mouseX >= width/2-4*side && mouseX < width/2) {
                         return 1;
                     }
-                    if (mX >= width / 2 + 2 * spacing && mX < width / 2 + 2 * spacing + 4*side){
+                    if (mouseX >= width/2 + 4*spacing && mouseX < width/2+4*side + 4*spacing){
                         return 2;
                         }
-                    if (mX >= width/2 - 6*side && mX < width/2-2*side ){
+                    if (mouseX >= width/2 - 2*side+spacing && mouseX < width/2 +2 *side+2*spacing){
                         return 3;
                     }
             }
@@ -305,14 +306,11 @@ public class GUI extends JFrame {
                         }
                     }
                 case START_MENU:
-                    if (mY >= height / 2 +4*side && mY < height / 2 + 6*side) {
+                    if (mouseY >= height/2 +side/4+2*spacing && mouseY < height/2+2*side+side/4+2*spacing) {
                         return 1;
                     }
-                    if (mY >= height / 2 - 2 * side && mY < height / 2) {
+                    if (mouseY >= height/2-2*side+2*spacing && mouseY < height/2+side/4-spacing) {
                         return 2;
-                    }
-                    if (mY >= height/2 - 2*side - 4*spacing && mY < height/2 - 2*side - 4*spacing + 2*side) {
-                        return 3;
                     }
             }
             return -1;
