@@ -176,7 +176,7 @@ public class GUI extends JFrame {
                     g2d.fillRect(0,0,width,height);
                     g.setColor(Color.white);
                     g.setFont(tinderFont);
-                    g.drawString("YOU WON",width/2 -150, side/4*3);
+                    g.drawString("YOU WON",width/2 -200, side/4*3);
                     for (int x = 0; x < map.getSizeX(); x++) {
                         for (int y = 0; y < map.getSizeY(); y++) {
                             g.setColor(Color.pink);
@@ -287,13 +287,13 @@ public class GUI extends JFrame {
                         }
                     }
                 case START_MENU:
-                    if (mouseX >= width/2-4*side && mouseX < width/2) {
+                    if (mouseX >= width/2-4*side && mouseX < width/2-4*side+4*side) {
                         return 1;
                     }
                     if (mouseX >= width/2 + 4*spacing && mouseX < width/2+4*side + 4*spacing){
                         return 2;
                         }
-                    if (mouseX >= width/2 - 2*side+spacing && mouseX < width/2 +2 *side+2*spacing){
+                    if (mouseX >= width/2 - 2*side+spacing && mouseX < width/2 - 2*side+4*side+2*spacing){
                         return 3;
                     }
             }
