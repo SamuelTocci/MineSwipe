@@ -238,6 +238,9 @@ public class GUI extends JFrame {
                             map.flag(inBoxX(mouseX), inBoxY(mouseY));
                         }
                     }
+                    if(map.hasWon()){
+                        gState = State.WON;
+                    }
                     break;
                 case START_MENU:
                     if (inBoxX(mouseX) == 1 && inBoxY(mouseY) == 1) {
