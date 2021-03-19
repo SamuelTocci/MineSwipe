@@ -98,7 +98,6 @@ public class Map {
                 }
             }
             else {
-                int tempMines = nrOfMines;
 
                 for (int a = -1; a <= 1; a++) {
                     for (int b = -1; b <= 1; b++) {
@@ -121,6 +120,7 @@ public class Map {
                     }
                 }
             }
+
             preSolve();
             visualizer(posX,posY);
 
@@ -186,17 +186,20 @@ public class Map {
     }
 
     public boolean flag(int posX, int posY){
-        if(flagCount == nrOfMines && map[posX][posY].isFlagged()){
-            flagCount--;
-            map[posX][posY].toggleFlagged();
-            return false;
-        }
+        if (moves>1) {
+            if (map[posX][posY].isFlagged()) {
+                flagCount--;
+                map[posX][posY].toggleFlagged();
+                return false;
+            }
+            if (nrOfMines > flagCount) {
+                flagCount++;
+                map[posX][posY].toggleFlagged();
+            }
 
-        flagCount++;
-        map[posX][posY].toggleFlagged();
-
-        if (flagCount == nrOfMines){
-            return hasWon();
+            if (flagCount == nrOfMines) {
+                return hasWon();
+            }
         }
         return false;
     }
