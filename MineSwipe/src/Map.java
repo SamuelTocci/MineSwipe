@@ -183,10 +183,14 @@ public class Map {
         else{
             map[x][y].setVisible(true);
         }
+        if(map[x][y].isFlagged()){
+            map[x][y].toggleFlagged();
+            flagCount--;
+        }
     }
 
     public boolean flag(int posX, int posY){
-        if (moves>1) {
+        if (moves>1 && !map[posX][posY].isVisible()) {
             if (map[posX][posY].isFlagged()) {
                 flagCount--;
                 map[posX][posY].toggleFlagged();

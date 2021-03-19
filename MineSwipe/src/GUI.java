@@ -32,7 +32,7 @@ public class GUI extends JFrame {
 
     public GUI() {
         this.setTitle("MineSwipe");
-        icon = Toolkit.getDefaultToolkit().getImage("MineSwipe\\res\\LOGO.png");
+        icon = Toolkit.getDefaultToolkit().getImage("res\\LOGO.png");
         setIconImage(icon);
         Dimension size= Toolkit.getDefaultToolkit().getScreenSize();
         width = (int)size.getWidth();
@@ -43,10 +43,10 @@ public class GUI extends JFrame {
         this.spacing = 5;
         this.side = 80;
         bombImage = icon.getScaledInstance(side/2, side/2, Image.SCALE_SMOOTH);
-        flagImage = Toolkit.getDefaultToolkit().getImage("MineSwipe\\res\\Flag.png").getScaledInstance(side/3*2, side/3*2, Image.SCALE_SMOOTH);
+        flagImage = Toolkit.getDefaultToolkit().getImage("res\\Flag.png").getScaledInstance(side/3*2, side/3*2, Image.SCALE_SMOOTH);
         mainImage = icon.getScaledInstance(3*side, 3*side, Image.SCALE_SMOOTH);
         try {
-            tinderFont = Font.createFont(Font.TRUETYPE_FONT, new File("MineSwipe\\res\\Tinder.ttf")).deriveFont(side/4*3f);
+            tinderFont = Font.createFont(Font.TRUETYPE_FONT, new File("res\\Tinder.ttf")).deriveFont(side/4*3f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(tinderFont);
         } catch (IOException |FontFormatException e) {
@@ -143,6 +143,9 @@ public class GUI extends JFrame {
                                 g.setFont(tinderFont);
                                 g.drawString(Integer.toString(map.getMap()[x][y].getValue()),spacing + x * side + width / 2 - map.getSizeX() / 2 * side - spacing / 2 + side/4,spacing + y * side + side+side/4*3-side/16);
                             }
+                            g.setColor(Color.WHITE);
+                            g.setFont(tinderFont);
+                            g.drawString("Flags Left: " + Integer.toString(map.getNrOfMines()-map.getFlagCount()),width/2-220, side/4*3);
                             repaint();
                         }
                     }
