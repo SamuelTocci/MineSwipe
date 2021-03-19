@@ -39,7 +39,6 @@ public class GUI extends JFrame {
         height = (int)size.getHeight();
         this.setSize(width, height);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setVisible(true);
         this.setResizable(true);
         this.spacing = 5;
         this.side = 80;
@@ -63,6 +62,7 @@ public class GUI extends JFrame {
 
         Board board = new Board();
         this.setContentPane(board);
+        this.setVisible(true);
     }
     public void setgState(State s){
         gState = s;
@@ -97,7 +97,7 @@ public class GUI extends JFrame {
                     g.drawString("MINESWIPE",width/2 -185, height/4);
 
                     g.setColor(Color.lightGray);
-                    if(mouseX >= width/2-4*side && mouseX < width/2-4*side+4*side && mouseY >= height/2 +side/4+2*spacing && mouseY < height/2+2*side+side/4+2*spacing) {
+                    if(mouseX >= width/2-4*side && mouseX < width/2 && mouseY >= height/2 +side/4+2*spacing && mouseY < height/2+2*side+side/4+2*spacing) {
                         g.fillRoundRect(width/2-4*side-2*spacing, height/2, 4*side, 2*side,side/4,side/4);
                     }
                     if(mouseX >= width/2 + 4*spacing && mouseX < width/2+4*side + 4*spacing && mouseY >= height/2 +side/4+2*spacing && mouseY < height/2+2*side+side/4+2*spacing) {
