@@ -80,10 +80,10 @@ public class Map {
          * als startplek op bom is, bom verplaatsen naar links boven
          * */
         public void startMove ( int posX, int posY){
-            boolean placed = false;
             if(nrOfMines>((sizeX*sizeY)/2)) {
                 if (map[posX][posY].isBomb()) {
                     map[posX][posY] = new NrTile();
+                    boolean placed = false;
                     while (!placed) {
                         for (int x = 0; x < sizeX; x++) {
                             for (int y = 0; y < sizeY; y++) {
@@ -104,7 +104,7 @@ public class Map {
                         if (posX + a >= 0 && posY + b >= 0 && posX + a < sizeX && posY + b < sizeY) {
                             if (map[posX + a][posY + b].isBomb()) {
                                 map[posX + a][posY + b] = new NrTile();
-
+                                boolean placed = false;
                                 while (!placed) {
                                     Random random = new Random();
                                     int randX = random.nextInt(sizeX);
