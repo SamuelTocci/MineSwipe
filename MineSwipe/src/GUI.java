@@ -225,13 +225,15 @@ public class GUI extends JFrame {
             switch (gState) {
                 case PLAY:
                     if (inBoxX(mouseX) != -1 && inBoxY(mouseY) != -1) {
-                        if (SwingUtilities.isLeftMouseButton(e)) {
-                            map.resolve(inBoxX(mouseX), inBoxY(mouseY));
-                            if (map.hasWon()) {
-                                setgState(State.WON);
-                            }
-                            if (map.resolve(inBoxX(mouseX), inBoxY(mouseY))) {
-                                setgState(State.DEATH);
+                        if(!map.getMap()[inBoxX(mouseX)][inBoxY(mouseY)].isFlagged()) {
+                            if (SwingUtilities.isLeftMouseButton(e)) {
+                                map.resolve(inBoxX(mouseX), inBoxY(mouseY));
+                                if (map.hasWon()) {
+                                    setgState(State.WON);
+                                }
+                                if (map.resolve(inBoxX(mouseX), inBoxY(mouseY))) {
+                                    setgState(State.DEATH);
+                                }
                             }
                         }
                         if (SwingUtilities.isRightMouseButton(e)) {
