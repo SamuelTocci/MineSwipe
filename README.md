@@ -1,2 +1,2 @@
 # MineSwipe
-labo 4-6
+Minesweeper with Tinder themed GUI
