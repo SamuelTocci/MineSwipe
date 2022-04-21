@@ -32,7 +32,7 @@ public class GUI extends JFrame {
 
     public GUI() {
         this.setTitle("MineSwipe");
-        icon = Toolkit.getDefaultToolkit().getImage("res\\LOGO.png");
+        icon = Toolkit.getDefaultToolkit().getImage("MineSwipe\\res\\LOGO.png");
         setIconImage(icon);
         Dimension size= Toolkit.getDefaultToolkit().getScreenSize();
         width = (int)size.getWidth();
@@ -41,12 +41,12 @@ public class GUI extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(true);
         this.spacing = 5;
-        this.side = 80;
+        this.side = 60;
         bombImage = icon.getScaledInstance(side/2, side/2, Image.SCALE_SMOOTH);
-        flagImage = Toolkit.getDefaultToolkit().getImage("res\\Flag.png").getScaledInstance(side/3*2, side/3*2, Image.SCALE_SMOOTH);
-        mainImage = icon.getScaledInstance(3*side, 3*side, Image.SCALE_SMOOTH);
+        flagImage = Toolkit.getDefaultToolkit().getImage("MineSwipe\\res\\Flag.png").getScaledInstance(side/3*2, side/3*2, Image.SCALE_SMOOTH);
+        mainImage = icon.getScaledInstance(4*side, 4*side, Image.SCALE_SMOOTH);
         try {
-            tinderFont = Font.createFont(Font.TRUETYPE_FONT, new File("res\\Tinder.ttf")).deriveFont(side/4*3f);
+            tinderFont = Font.createFont(Font.TRUETYPE_FONT, new File("MineSwipe\\res\\Tinder.ttf")).deriveFont(side/4*3f);
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(tinderFont);
         } catch (IOException |FontFormatException e) {
@@ -90,11 +90,11 @@ public class GUI extends JFrame {
                     g.fillRoundRect(width/2-4*side-2*spacing, height/2, 4*side, 2*side,side/4,side/4);
                     g.fillRoundRect(width/2 + 2*spacing, height/2, 4*side, 2*side,side/4,side/4);
                     g.fillRoundRect(width/2 - 2*side, height/2 - 2*side - 4*spacing, 4*side, 2*side,side/4,side/4);
-                    g.drawImage(mainImage, width/2-120,height/6 - 2*side - 4*spacing,this);
+                    g.drawImage(mainImage, width/2-2*side,height/6 - 2*side - 4*spacing,this);
 
                     g.setColor(Color.white);
                     g.setFont(tinderFont);
-                    g.drawString("MINESWIPE",width/2 -185, height/4);
+                    g.drawString("MINESWIPE",width/2-(7*side)/3, height/4+side);
 
                     g.setColor(Color.lightGray);
                     if(mouseX >= width/2-4*side && mouseX < width/2 && mouseY >= height/2 +side/4+2*spacing && mouseY < height/2+2*side+side/4+2*spacing) {
@@ -262,6 +262,8 @@ public class GUI extends JFrame {
                     }
                     break;
                 case DEATH:
+
+                case WON:
                     gState = State.START_MENU;
                     break;
             }
@@ -292,7 +294,7 @@ public class GUI extends JFrame {
                         }
                     }
                 case START_MENU:
-                    if (mouseX >= width/2-4*side && mouseX < width/2-4*side+4*side) {
+                    if (mouseX >= width/2-4*side && mouseX < width/2) {
                         return 1;
                     }
                     if (mouseX >= width/2 + 4*spacing && mouseX < width/2+4*side + 4*spacing){
