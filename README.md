@@ -1,2 +1,2 @@
 # MineSwipe
-Minesweeper with Tinder themed GUI
+Minesweeper implementation
